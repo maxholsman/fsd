@@ -45,7 +45,7 @@ def patch_generation(model):
 patch_generation(small_model)
 patch_generation(large_model)
 ```
-5. Use FSD as you would use regular speculative decoding by passing as assistant model to the target model's `model.generate` call. Set the divergence type with the `fsd_div_type` parameter (defaults to JS divergence), and the div threshold with the `fsd_div_threshold` parameter. * *Whether FSD or traditional SD is run depends on whether `fsd_div_threshold` is set to a value - if this parameter is not passed into `model.generate`, regular SD will run* *
+5. Use FSD as you would use regular speculative decoding by passing as assistant model to the target model's `model.generate` call. Set the divergence type with the `fsd_div_type` parameter (defaults to JS divergence), and the div threshold with the `fsd_div_threshold` parameter. *Whether FSD or traditional SD is run depends on whether `fsd_div_threshold` is set to a value - if this parameter is not passed into `model.generate`, regular SD will run*
 
 ```python 
 input_text = "Write me an essay about the massive risks of climate change."
