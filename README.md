@@ -4,7 +4,7 @@ This is the official fuzzy speculative decoding implementation used to run exper
 
 ## How to use:
 
-We designed our implementation on top of the huggingface transformers library for easy use. As such, our implementation modifies the default model.generate code that allows for assisted decoding to also allow for fuzzy speculative decoding. 
+We designed our implementation on top of the huggingface `transformers` library for easy use. As such, our implementation modifies the default `model.generate` assisted decoding functionality to also allow for fuzzy speculative decoding in addition to regular speculative decoding. 
 
 To use our implementation, follow the steps below: 
 1. Install `transformers` version 4.44
@@ -16,7 +16,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from fsd.fsd_utils import FuzzyGenerationMixin
 ```
 
-4. When defining the target and draft models, reroute the use of the default `GenerationMixin` with
+4. When defining the target and draft models, reroute the use of the default `GenerationMixin` with:
 
 ```python
 small_tokenizer = AutoTokenizer.from_pretrained(small_model_id)
@@ -24,7 +24,7 @@ small_model = AutoModelForCausalLM.from_pretrained(small_model_id, torch_dtype=t
 large_model = AutoModelForCausalLM.from_pretrained(large_model_id, torch_dtype=torch.bfloat16, device_map='auto')
 
 def patch_generation(model):
-    """Ensure the model instance retains its specific `prepare_inputs_for_generation` method."""
+    """Patches model.generate functions to use modified code from FuzzyGenerationMixin"""
     
     # Preserve model-specific `prepare_inputs_for_generation`
     if not hasattr(model, "prepare_inputs_for_generation") or model.prepare_inputs_for_generation.__func__ == fsd_utils.FuzzyGenerationMixin.prepare_inputs_for_generation:
@@ -45,7 +45,7 @@ def patch_generation(model):
 patch_generation(small_model)
 patch_generation(large_model)
 ```
-5. Use FSD with `model.generate` as you would use SD with assisted generation. Set the divergence type with the `fsd_div_type` parameter, and the div threshold with the `fsd_div_threshold` parameter. 
+5. Use FSD as you would use regular speculative decoding by passing as assistant model to the target model's `model.generate` call. Set the divergence type with the `fsd_div_type` parameter (defaults to JS divergence), and the div threshold with the `fsd_div_threshold` parameter. * *Whether FSD or traditional SD is run depends on whether `fsd_div_threshold` is set to a value - if this parameter is not passed into `model.generate`, regular SD will run* *
 
 ```python 
 input_text = "Write me an essay about the massive risks of climate change."
@@ -56,6 +56,6 @@ output = large_model.generate(**input_ids, assistant_model=small_model, fsd_div_
 print(f"output: {output}")
 print(f"output: {small_tokenizer.decode(output[0])}")
 ```
-The divergence options are KL divergence (`kl_div`), JS divergence (`js_div`), TV distance (`tv_div`).
+The divergence options are KL divergence (`kl_div`), JS divergence (`js_div`), TV distance (`tv_div`), as well as top-K and top-P variants of these three divergences (`top_k_kl_div`, `top_k_js_div`, `top_k_tv_div`). Note that the `fsd_div_threshold` is highly dependent on which divergence type is being used. 
 
 
