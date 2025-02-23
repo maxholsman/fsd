@@ -1,4 +1,4 @@
-# FSD implementation for in "Fuzzy Speculative Decoding for a Tunable Accuracy-Runtime Tradeoff"
+# FSD implementation from "Fuzzy Speculative Decoding for a Tunable Accuracy-Runtime Tradeoff"
 
 This is the official fuzzy speculative decoding implementation used to run experiments in the paper "Fuzzy Speculative Decoding for a Tunable Accuracy-Runtime Tradeoff".
 
