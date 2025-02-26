@@ -7,7 +7,7 @@ This is the official fuzzy speculative decoding implementation used to run exper
 We designed our implementation on top of the huggingface `transformers` library for easy use. As such, our implementation modifies the default `model.generate` assisted decoding functionality to also allow for fuzzy speculative decoding in addition to regular speculative decoding. 
 
 To use our implementation, follow the steps below: 
-1. Install `transformers`==4.44
+1. Install `transformers==4.44`
 2. Our modified `model.generate` functionality can easily be accessed via custom `ForCausalLM` classes. Currently, we have implemented custom classes for all models tested in our paper, namely `LlamaForCausalLM`, `Gemma2ForCausalLM` and `Qwen2ForCausalLM`. These our custom version of these three model classes can be accessed through a custom class `FSDAutoModelForCausalLM`. Thus, to initialize:
 
 ```python
