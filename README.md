@@ -36,4 +36,11 @@ print(f"output: {small_tokenizer.decode(output[0])}")
 
 The divergence options are KL divergence (`kl_div`), JS divergence (`js_div`), TV distance (`tv_div`), as well as top-K and top-P variants of these three divergences (`top_k_kl_div`, `top_k_js_div`, `top_k_tv_div`). Note that the `fsd_div_threshold` is highly dependent on which divergence type is being used. 
 
+## Example usage
+`csqa_eval_example.py` gives an example of how we evaluated FSD (this file is a cleaned up version of the exact code we used). This code can easily be modified to evaluate new datasets. 
 
+To use, simply run:
+
+```bash
+python csqa_eval_example.py --small_model_id "google/gemma-2-2b-it" --large_model_id "google/gemma-2-27b-it" --fsd_div_threshold 0.4 --fsd_div_type "js_div" --num_evals 5
+```
