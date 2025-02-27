@@ -94,6 +94,10 @@ def eval_commonsenseqa(model, small_model, fsd_div_threshold, fsd_div_type, data
             answer_key = item['answerKey']
             text_choices = choices['text']
             
+            #-------------------------NOTE--------------------------------------------
+            #The initial prompt was built for Llama3.1 models. We then adjust this prompt for Gemma2 and Qwen2.5 models to use their respective prompt formats. 
+            #---------------------------------------------------------------------
+            
             formatted_question = f'''<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are a helpful and knowledgable assistant that answer a series of multiple-choice question that require common sense reasoning. To answer each question, consider the context and use your understanding of the world. Analyze the question and options carefully, then select the most appropriate answer. <|eot_id|>
             
             <|start_header_id|>user<|end_header_id|> You will be given a multiple-choice question that requires common sense reasoning. For each question, select one of the given answers options that most accurately answers the question. Provide a detailed chain of thought that explains your reasoning leading to the answer.' Only answer with your explanation and your answer, ending with 'Therefore, the answer is ANSWER_LETTER.', following the examples below:

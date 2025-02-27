@@ -39,8 +39,9 @@ The divergence options are KL divergence (`kl_div`), JS divergence (`js_div`), T
 ## Example usage
 `csqa_eval_example.py` gives an example of how we evaluated FSD (this file is a cleaned up version of the exact code we used). This code can easily be modified to evaluate new datasets. 
 
-To use, simply run:
+To use, simply pass the desired arguments. For example: 
 
 ```bash
 python csqa_eval_example.py --small_model_id "google/gemma-2-2b-it" --large_model_id "google/gemma-2-27b-it" --fsd_div_threshold 0.4 --fsd_div_type "js_div" --num_evals 5
 ```
+
