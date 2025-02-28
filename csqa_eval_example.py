@@ -95,7 +95,8 @@ def eval_commonsenseqa(model, small_model, fsd_div_threshold, fsd_div_type, data
             text_choices = choices['text']
             
             #-------------------------NOTE--------------------------------------------
-            #The initial prompt was built for Llama3.1 models. We then adjust this prompt for Gemma2 and Qwen2.5 models to use their respective prompt formats. 
+            # To use the correct prompt format for each model, we first define the prompt with special tokens for Llama3.1 models. 
+            # If we are evaluating Gemma2 or Qwen2.5 models, we then adjust this prompt by replacing Llama3.1 tokens with Gemma2 and Qwen2.5 model special tokens. 
             #---------------------------------------------------------------------
             
             formatted_question = f'''<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are a helpful and knowledgable assistant that answer a series of multiple-choice question that require common sense reasoning. To answer each question, consider the context and use your understanding of the world. Analyze the question and options carefully, then select the most appropriate answer. <|eot_id|>
