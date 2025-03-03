@@ -4,11 +4,11 @@ This is the official fuzzy speculative decoding implementation used to run exper
 
 ## How to use:
 
-We designed our implementation on top of the huggingface `transformers` library for easy use. As such, our implementation modifies the default `model.generate` assisted decoding functionality to also allow for fuzzy speculative decoding in addition to regular speculative decoding. 
+We designed our implementation on top of the huggingface `transformers` library for easy use. Our implementation modifies the default `model.generate` assisted decoding functionality to allow for fuzzy speculative decoding in addition to regular speculative decoding. We've implemented cusotm custom `ForCausalLM` classes that allow users to easily access this `model.generate` functionality. Currently, we have implemented custom classes for all models tested in our paper, namely `LlamaForCausalLM`, `Gemma2ForCausalLM` and `Qwen2ForCausalLM`. These custom version model classes can initialized directly, or through another custom class `FSDAutoModelForCausalLM`.
 
 To use our implementation, follow the steps below: 
 1. Install `transformers==4.44`
-2. Our modified `model.generate` functionality can easily be accessed via custom `ForCausalLM` classes. Currently, we have implemented custom classes for all models tested in our paper, namely `LlamaForCausalLM`, `Gemma2ForCausalLM` and `Qwen2ForCausalLM`. These our custom version of these three model classes can be accessed through a custom class `FSDAutoModelForCausalLM`. Thus, to initialize:
+2. Initialize the target and draft models as follows:
 
 ```python
 from transformers
@@ -22,7 +22,7 @@ small_model = FSDAutoModelForCausalLM.from_pretrained(small_model_id, torch_dtyp
 large_model = FSDAutoModelForCausalLM.from_pretrained(large_model_id, torch_dtype=torch.bfloat16, device_map='auto')
 ```
 
-5. Use FSD as you would use regular speculative decoding by passing as assistant model to the target model's `model.generate` call. Set the divergence type with the `fsd_div_type` parameter (defaults to JS divergence), and the div threshold with the `fsd_div_threshold` parameter. *Whether FSD or traditional SD is run depends on whether `fsd_div_threshold` is set to a value - if this parameter is not passed into `model.generate`, regular SD will run*
+5. Use FSD as you would use regular speculative decoding by passing the assistant model to the target model's `model.generate` call. Set the divergence type with the `fsd_div_type` parameter (defaults to JS divergence), and the div threshold with the `fsd_div_threshold` parameter. *Whether FSD or traditional SD is run depends on whether `fsd_div_threshold` is set to a value - if this parameter is not passed into `model.generate`, regular SD will run*
 
 ```python 
 input_text = "Write me an essay about the massive risks of climate change."
@@ -42,6 +42,6 @@ The divergence options are KL divergence (`kl_div`), JS divergence (`js_div`), T
 To use, simply pass the desired arguments. For example: 
 
 ```bash
-python csqa_eval_example.py --small_model_id "google/gemma-2-2b-it" --large_model_id "google/gemma-2-27b-it" --fsd_div_threshold 0.4 --fsd_div_type "js_div" --num_evals 5
+python3 csqa_eval_example.py --small_model_id "google/gemma-2-2b-it" --large_model_id "google/gemma-2-27b-it" --fsd_div_threshold 0.4 --fsd_div_type "js_div" --num_evals 5
 ```
 
